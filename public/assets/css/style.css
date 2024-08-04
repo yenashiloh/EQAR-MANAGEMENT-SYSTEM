@@ -1,0 +1,292 @@
+/*Header*/
+body {
+    background-color: #f5f1f1;
+}
+.navbar-custom {
+    background-color: #171617;
+    padding-left: 20px;
+}
+
+.navbar-custom .nav-link {
+    color: white;
+}
+
+.navbar-custom .nav-link:hover {
+    color: #F7D328;
+    border-bottom: 2px solid #F7D328;
+}
+
+.navbar-custom .nav-link.active {
+    color: #F7D328;
+    border-bottom: 2px solid #F7D328;
+}
+
+.navbar-custom .navbar-brand {
+    display: flex;
+    align-items: center;
+    margin-right: 40px;
+    margin-left: 100px;
+}
+
+.navbar-custom .navbar-brand img {
+    margin-right: 10px;
+}
+
+.navbar-custom .brand-text {
+    color: white;
+    font-size: 1.25rem;
+    margin-right: 30px;
+}
+
+.nav-item {
+    margin-right: 30px; 
+}
+
+.reports-item {
+    position: static; 
+}
+
+.reports-submenu-custom {
+    display: none;
+    position: absolute;
+    margin-top: 2px;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #171617;
+    z-index: 1000;
+    padding: 10px 0;
+}
+
+.reports-submenu-custom.show-submenu {
+    display: block;
+}
+
+.submenu-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.submenu-item {
+    display: block;
+    color: #ffffff;
+    padding: 8px 0;
+    text-decoration: none;
+}
+
+.submenu-item:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.reports-item:hover .reports-submenu-custom {
+    display: none;
+}
+
+.show-submenu {
+    display: block;
+}
+
+.reports-submenu-custom.show-submenu {
+    display: block;
+}
+
+/*Accomplishment*/
+.academic {
+    margin-bottom: 20px;
+}
+
+.custom-dropdown-toggle::after {
+    content: none !important;
+}
+
+.custom-dropdown-toggle .fa-chevron-down {
+    margin-left: 5px; 
+}
+
+
+.academic-list {
+    color: #800000 !important;
+}
+
+.academic-list a {
+    color: #800000 !important;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+.academic-list a:hover {
+    color: #171617 !important;
+    text-decoration: none;
+}
+
+.dropdown-menu .dropdown-item {
+    color: #171617;
+}
+.dropdown-menu a {
+    color: #171617 !important;
+    font-size: 18px;
+}
+
+.dropdown-toggle::after {
+    display: none; 
+}
+
+.fa-chevron-down{
+    font-size: 15px;
+    margin-left: 3px;
+}
+
+.fa-chevron-up{
+    font-size: 15px;
+    margin-left: 3px;
+}
+
+.course {
+    margin-bottom: 15px;
+}
+
+.sub-menu {
+    list-style-type: none;
+    padding-left: 20px;
+    display: none; 
+}
+
+.sub-menu li {
+    margin: 10px 0;
+}
+
+.sub-menu a {
+    text-decoration: none;
+    color: #333;
+}
+
+.sub-menu a:hover {
+    text-decoration: underline;
+}
+
+
+/*Class Records*/
+.header-center {
+    text-align: center;
+}
+
+.table thead th {
+    background-color: #800000;
+    color: white;
+    font-weight: normal !important;
+}
+
+.table thead th,
+.table tbody td {
+    vertical-align: middle;
+}
+
+.table tbody td {
+    background-color: white;
+    vertical-align: middle;
+}
+
+/*Add Class Records*/
+select.form-select {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    appearance: none;
+}
+
+.dropzone {
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.dropzone.dragover {
+    background-color: #f8f9fa;
+    border-color: #0d6efd;
+}
+.bi-cloud-arrow-up {
+    font-size: 2rem;
+    color: #6c757d;
+}
+#dropzoneContent {
+    width: 100%;
+}
+
+
+/*Reports*/
+.no-margin-right {
+    margin-right: 0 !important;
+}
+.hap-title {
+    color: rgb(18, 179, 18);
+    text-align: center;
+    margin: 0;
+}
+
+.hap-date {
+    font-size: 11px;
+    color: rgb(18, 179, 18);
+    display: block;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.dean-title {
+    color: rgb(18, 179, 18);
+    text-align: center;
+    margin: 0;
+}
+
+.dean-date {
+    font-size: 11px;
+    color: rgb(18, 179, 18);
+    display: block;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.review-title {
+    color: blue;
+    margin-top: 0;
+    text-align: center;
+}
+
+/*Loading Spinner*/
+#saveButton {
+    position: relative;
+    overflow: hidden;
+    transition: width 0.3s ease;
+}
+
+#saveButton .progress-bar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.7);
+    width: 0;
+    transition: width 0.3s ease;
+}
+
+#saveButton.submitting {
+    width: 230px;
+    max-width: 230px;
+}
