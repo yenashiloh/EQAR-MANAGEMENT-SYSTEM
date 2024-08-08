@@ -14,7 +14,7 @@
                     Add Accomplishments (an academic document that communicates information about a specific course and
                     explains the rules, responsibilities, and expectations associated with it.)
                 </h5>
-                <a href="faculty.accomplishments.store-accomplishment', ['program_folder_id' => $program_folder_id]) }}" class="btn btn-danger">
+                <a href="javascript:history.back()" class="btn btn-danger">
                     <i class="fas fa-arrow-left"></i> Back to previous page
                 </a>
             </div>
@@ -32,7 +32,7 @@
                         </h6>
                     </div>
                     
-                    <form action="{{ route('faculty.accomplishments.folders.store-class-list', $program_folder_id) }}" method="POST">
+                    <form action="{{ route('faculty.accomplishments.folders.store-class-list', $program_folder_id) }}"  method="POST" enctype="multipart/form-data">
                         @csrf
                 
                         <div class="container">
@@ -107,7 +107,7 @@
                                     <div class="dropzone" id="fileUploadDropzone">
                                         <input type="file" id="fileUpload" class="file-input" name="fileUpload" hidden>
                                         <div id="dropzoneContent">
-                                            <i class="fas fa-cloud-upload-alt" style="font-size: 30px;"></i>
+                                            <i class="fas fa-cloud-upload-alt" style="font-size: 30p    x;"></i>
                                             <p>Drag and drop files here or click to upload</p>
                                         </div>
                                     </div>
@@ -138,4 +138,5 @@
 
     @include('partials.faculty-footer')
     <script src="{{ asset('assets/js/forms.js') }}"></script>
+    
 

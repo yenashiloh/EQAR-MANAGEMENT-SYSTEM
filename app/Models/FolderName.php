@@ -22,6 +22,8 @@ class FolderName extends Model
     {
         return $this->belongsTo(AdminAccount::class, 'admin_id', 'id');
     }
+
+    
 }
 
 

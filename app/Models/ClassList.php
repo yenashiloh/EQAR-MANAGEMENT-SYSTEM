@@ -23,6 +23,7 @@ class ClassList extends Model
         'supportingDocuments',
         'fileUpload',
         'notes',
+        'original_file_name', 
     ];
 
     protected $casts = [

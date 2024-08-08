@@ -17,6 +17,7 @@ class ProgramFolder extends Model
         'year_semestral_id',
         'admin_id',
         'folder_name',
+        'folder_name_id'
     ];
 
     public function yearSemestral()
@@ -32,6 +33,11 @@ class ProgramFolder extends Model
     public function folderName()
     {
         return $this->belongsTo(FolderName::class, 'folder_name_id');
+    }
+
+    public function classLists()
+    {
+        return $this->hasMany(ClassList::class, 'program_folder_id', 'program_folder_id');
     }
 
 }

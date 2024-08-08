@@ -5,6 +5,7 @@ body {
 .navbar-custom {
     background-color: #171617;
     padding-left: 20px;
+    padding-right: 20px; 
 }
 
 .navbar-custom .nav-link {
@@ -24,8 +25,8 @@ body {
 .navbar-custom .navbar-brand {
     display: flex;
     align-items: center;
-    margin-right: 40px;
-    margin-left: 100px;
+    margin-left: 60px; 
+    margin-right: 60px; 
 }
 
 .navbar-custom .navbar-brand img {
@@ -35,13 +36,15 @@ body {
 .navbar-custom .brand-text {
     color: white;
     font-size: 1.25rem;
-    margin-right: 30px;
 }
 
 .nav-item {
     margin-right: 30px; 
 }
 
+.ml-auto {
+    margin-right: 20px; 
+}
 .reports-submenu-custom, .maintenance-submenu-custom {
     display: none;
     position: absolute;

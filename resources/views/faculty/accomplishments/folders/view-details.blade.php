@@ -17,35 +17,44 @@
             </div>
         </div>
     </div>
-    
+
     <div class="row">
         <div class="col-md-8 col-lg-10 mx-auto">
             <div class="card mt-3">
                 <div class="card-body">
-                    
-       
+                    <a href="{{ route('faculty.accomplishments.add-accomplishment', ['program_folder_id' => $program_folder_id]) }}"
+                        class="btn btn-success mb-3">
+                        <i class="fas fa-plus"></i> Add Accomplishment
+                    </a>
+
                     <table id="dataTable" class="table table-striped">
                         <thead>
                             <tr>
                                 <th>No.</th>
-                                <th>Date & Time</th>
-                                <th>Folder Name</th>
-                                <th>Uploaded By</th>
+                                <th>Department</th>
+                                <th>Course Title</th>
+                                <th>Assigned Task</th>
+                                <th>Date</th>
+                                <th>File</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($programFolders as $index => $programFolder)
+                            @foreach ($classLists as $key => $classList)
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $programFolder->created_at->locale('en_PH')->format('F j, Y, g:i A') }}</td>
-                                    <td >{{ $programFolder->folder_name }}</td>
-                                    <td>{{ $programFolder->admin ? $programFolder->admin->name : 'N/A' }}</td>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>{{ $classList->department }}</td>
+                                    <td>{{ $classList->courseTitle }}</td>
+                                    <td>{{ $classList->assignedTask }}</td>
+                                    <td>{{ $classList->dateFinished->format('F j, Y') }}</td>
                                     <td>
-                                        <a href="{{ route('faculty.accomplishments.folders.all-uploaded-file', ['id' => $programFolder->program_folder_id]) }}" class="btn btn-info btn-sm">
-                                            View Files
-                                        </a>
-                                    
+                                        @if($classList->fileUpload)
+                                            <a href="{{ Storage::url($classList->fileUpload) }}" target="_blank">
+                                                {{ $classList->original_file_name ?? 'View File' }}
+                                            </a>
+                                        @else
+                                            No file uploaded
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -58,4 +67,3 @@
 </div>
 
 @include('partials.faculty-footer')
-

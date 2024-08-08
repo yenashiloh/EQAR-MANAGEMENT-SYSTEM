@@ -20,6 +20,7 @@ use App\Models\ProgramFolder;
 use App\Models\FolderName;
 
 
+
 class FacultyController extends Controller
 {
     //get the faculty details
@@ -291,7 +292,7 @@ class FacultyController extends Controller
             'assignedTask' => 'required|string',
             'dateFinished' => 'required|date',
             'supportingDocuments' => 'nullable|string',
-            'fileUpload' => 'required|file',
+           'fileUpload' => 'required|file|max:51200',
             'notes' => 'nullable|string',
         ]);
     
@@ -318,14 +319,12 @@ class FacultyController extends Controller
     
         return redirect()->route($redirectRoute)->with('success', 'Submitted successfully!');
     }
-    
     //store class record
     public function storeAccomplishment(Request $request, $program_folder_id)
     {
         try {
             \Log::info('Program Folder ID: ' . $program_folder_id);
 
-            // Store the class record
             $result = $this->storeAccomplishmentBase($request, \App\Models\ClassRecord::class, 'faculty.accomplishments.store-accomplishment', $program_folder_id);
 
             if ($request->ajax()) {
@@ -383,9 +382,9 @@ class FacultyController extends Controller
             if (!auth()->check()) {
                 return redirect()->route('faculty-login');
             }
-
+    
             $faculty_account_id = auth()->user()->faculty_account_id;
-
+    
             $result = $this->storeAccomplishmentBase(
                 $request,
                 \App\Models\ClassList::class,
@@ -393,12 +392,12 @@ class FacultyController extends Controller
                 $program_folder_id,
                 $faculty_account_id
             );
-
+    
             $redirectUrl = route('faculty.accomplishments.folders.all-uploaded-file', [
                 'id' => $program_folder_id
             ]);
             \Log::info("Redirect URL: " . $redirectUrl);
-            
+    
             if ($request->ajax()) {
                 return response()->json([
                     'success' => true,
@@ -406,20 +405,31 @@ class FacultyController extends Controller
                     'message' => 'Class list submitted successfully!'
                 ]);
             }
-
+    
             return redirect($redirectUrl)->with('success', 'Class list submitted successfully!');
         } catch (\Exception $e) {
             \Log::error('Error saving class list: ' . $e->getMessage());
-
+    
             if ($request->ajax()) {
                 return response()->json([
-                    'success' => true,
+                    'success' => false,
                     'redirect' => $redirectUrl,
-                    'message' => 'Class list submitted successfully!'
+                    'message' => 'An error occurred while saving the class list.'
                 ]);
             }
-
+    
             return back()->with('error', 'An error occurred while saving the class list.');
         }
     }
+
+    //logout
+    public function facultyLogout(Request $request)
+    {
+        auth()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect(route('faculty-login'));
+    }
+
+   
 }

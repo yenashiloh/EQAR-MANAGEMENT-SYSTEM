@@ -104,4 +104,32 @@ class FolderController extends Controller
         ]);
     }
     
+    public function destroy($id)
+    {
+        $folder = ClassList::find($id);
+        
+        if ($folder) {
+            $folder->delete();
+            return response()->json(['success' => true, 'message' => 'Folder deleted successfully.']);
+        }
+        
+        return response()->json(['success' => false, 'message' => 'Folder not found.'], 404);
+    }
+
+    public function show($id)
+    {
+        $classList = ClassList::findOrFail($id);
+        return response()->json($classList);
+    }
+    
+
+    // public function deleteFolder($year_semestral_id)
+    // {
+    //     $folder = YearSemestralFolder::find($year_semestral_id);
+    //     $folder->delete();
+
+    //     return redirect()->route('admin.accomplishment.class-records.year-semestral', ['folder_name_id' => $folder->folder_name_id])
+    //         ->with('success', 'Folder deleted successfully!');
+    // }
+
 }

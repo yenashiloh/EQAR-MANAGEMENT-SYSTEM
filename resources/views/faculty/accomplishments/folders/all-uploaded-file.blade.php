@@ -2,7 +2,11 @@
 <html lang="en">
 <title>Accomplishments</title>
 @include('partials.faculty-header')
-
+<style>
+    .modal-lg {
+        max-width: 65%;
+    }
+</style>
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-8 col-lg-10 mx-auto">
@@ -11,7 +15,9 @@
                     {{ $folderName }} (an academic document that communicates information about a specific course and
                     explains the rules, responsibilities, and expectations associated with it.)
                 </h5>
-                <a href="" class="btn btn-danger"><i class="fas fa-arrow-left"></i> Back to previous page</a>
+                <a href="javascript:history.back()" class="btn btn-danger">
+                    <i class="fas fa-arrow-left"></i> Back to previous page
+                </a>
             </div>
         </div>
     </div>
@@ -20,17 +26,19 @@
         <div class="col-md-8 col-lg-10 mx-auto">
             <div class="card mt-3">
                 <div class="card-body">
-                    <a href="{{ route('faculty.accomplishments.add-accomplishment', ['program_folder_id' => $program_folder_id]) }}" class="btn btn-success mb-3">
+                    <a href="{{ route('faculty.accomplishments.add-accomplishment', ['program_folder_id' => $program_folder_id]) }}"
+                        class="btn btn-success mb-3">
                         <i class="fas fa-plus"></i> Add Accomplishment
                     </a>
 
                     @if (session('success'))
-                    <div id="success-alert" class="alert alert-success alert-dismissible fade show text-center" role="alert">
-                        {{ session('success') }}
-                    </div>
-                @endif
+                        <div id="success-alert" class="alert alert-success alert-dismissible fade show text-center"
+                            role="alert">
+                            {{ session('success') }}
+                        </div>
+                    @endif
 
-                {{-- <script>
+                    {{-- <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         setTimeout(function() {
                             var successAlert = document.getElementById('success-alert');
@@ -40,36 +48,25 @@
                         }, 3000); // 3000 milliseconds = 3 seconds
                     });
                 </script> --}}
-                
-                    {{-- <!-- Modal Add New Folder-->
-                    <div class="modal fade" id="addFolderModal" tabindex="-1" role="dialog"
-                        aria-labelledby="addFolderModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
+                    <!-- View All Details Modal -->
+                    <div class="modal fade" id="viewDetailsModal" tabindex="-1" role="dialog"
+                        aria-labelledby="viewDetailsModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="addFolderModalLabel">Add Program Folder</h5>
+                                    <h5 class="modal-title" id="viewDetailsModalLabel">View Details</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <form action="" method="POST">
-                                    @csrf
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <label for="folderName">Folder Name</label>
-                                            <input type="text" class="form-control" id="folderName"
-                                                name="folder_name" required>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Save Folder</button>
-                                    </div>
-                                </form>
+                                <div class="modal-body" id="viewDetailsContent">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
 
                     <!-- Edit Folder Modal -->
                     <div class="modal fade" id="programFolderModal" tabindex="-1" role="dialog"
@@ -106,11 +103,11 @@
                         <thead>
                             <tr>
                                 <th>No.</th>
+                                <th>Date Submitted</th>
                                 <th>Department</th>
                                 <th>Course Title</th>
                                 <th>Assigned Task</th>
-                                <th>Date</th>
-                                <th>Notes</th>
+                                <th>File</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -118,28 +115,34 @@
                             @foreach ($classLists as $key => $classList)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
+                                    <td>{{ $classList->created_at->format('F j, Y') }}</td>
                                     <td>{{ $classList->department }}</td>
                                     <td>{{ $classList->courseTitle }}</td>
                                     <td>{{ $classList->assignedTask }}</td>
-                                    <td>{{ $classList->dateFinished->format('F j, Y') }}</td>
-
-                                    <td>{{ $classList->notes }}</td>
+                                    <td>
+                                        @if ($classList->fileUpload)
+                                        <a href="#" onclick="window.open('{{ Storage::url($classList->fileUpload) }}', '_blank')">
+                                            {{ $classList->original_file_name ?? 'View File' }}
+                                        </a>
+                                        @else
+                                            No file uploaded
+                                        @endif
+                                    </td>
                                     <td>
                                         <div class="d-flex">
-                                            <a href="#" class="btn btn-secondary btn-sm me-2">View</a>
-                                            <a href="{{ route('class-lists.edit', $classList->id) }}" class="btn btn-warning btn-sm me-2">Edit</a>
-                                            <form action="{{ route('class-lists.destroy', $classList->id) }}" method="POST" class="mb-0">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                            </form>
+                                            <a href="#" class="btn btn-info btn-sm"
+                                                data-id="{{ $classList->id }}">View</a>
+                                            <a href="{{ route('class-lists.edit', $classList->id) }}"
+                                                class="btn btn-warning btn-sm">Edit</a>
+                                            <button class="btn btn-danger btn-sm delete-folder-btn"
+                                                data-url="{{ route('class-lists.destroy', $classList->id) }}">
+                                                Delete
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
-                        
-                    </table>
                     </table>
                 </div>
             </div>
@@ -150,41 +153,120 @@
 @include('partials.faculty-footer')
 
 <script>
-    function deleteFolder(id) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/admin/accomplishments/view-folders/delete-program-folder/' + id,
-                    type: 'DELETE',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        Swal.fire(
-                            'Deleted!',
-                            'Your folder has been deleted.',
-                            'success'
-                        ).then(() => {
-                            location.reload();
-                        });
-                    },
-                    error: function(xhr) {
-                        Swal.fire(
-                            'Error!',
-                            'An error occurred while deleting the folder.',
-                            'error'
-                        );
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.delete-folder-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = this.dataset.url;
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This action cannot be undone.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(url, {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector(
+                                        'meta[name="csrf-token"]').getAttribute(
+                                        'content')
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        data.message,
+                                        'success'
+                                    ).then(() => {
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        'Error!',
+                                        data.message,
+                                        'error'
+                                    );
+                                }
+                            })
+                            .catch(error => {
+                                Swal.fire(
+                                    'Error!',
+                                    'An error occurred. Please try again later.',
+                                    'error'
+                                );
+                            });
                     }
                 });
-            }
+            });
         });
-    }
+    });
+
+    //view details
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.btn-info').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const classListId = this.dataset.id;
+
+                fetch(`/class-lists/${classListId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const dateCreated = new Date(data.created_at);
+                        const dateFinished = new Date(data.dateFinished);
+                        const formattedCreatedDate = new Intl.DateTimeFormat('en-US', {
+                            month: 'long',
+                            day: 'numeric',
+                            year: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            hour12: true
+                        }).format(dateCreated);
+
+                        const formattedFinishedDate = new Intl.DateTimeFormat('en-US', {
+                            month: 'long',
+                            day: 'numeric',
+                            year: 'numeric',
+                            hour12: true
+                        }).format(dateFinished);
+
+                        document.getElementById('viewDetailsContent').innerHTML = `
+                        <div class="row">
+                            <div class="col-md-6">
+                              <p><strong>Date Created:</strong> ${formattedCreatedDate}</p>
+                                <p><strong>Reported to:</strong> ${data.reporting_to}</p>
+                                <p><strong>Course Title:</strong> ${data.courseTitle}</p>
+                                <p><strong>Course Code:</strong> ${data.courseCode}</p>
+                              ${data.notes ? `<p><strong>Notes:</strong> ${data.notes}</p>` : ''}
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Assigned Task:</strong> ${data.assignedTask}</p>
+                                <p><strong>Department:</strong> ${data.department}</p>
+                                <p><strong>Date Finished:</strong> ${formattedFinishedDate}</p>
+                                <p><strong>File:</strong> ${data.fileUpload ? `<a href="${"/storage/" + data.fileUpload}" target="_blank">${data.originalFileName || 'View File'}</a>` : 'No file uploaded'}</p>
+                               ${data.supportingDocuments ? `<p><strong>Description of Supporting Documents:</strong> ${data.supportingDocuments}</p>` : ''}
+                            
+                          
+                            </div>
+                        </div>
+                    `;
+                        $('#viewDetailsModal').modal('show');
+                    })
+                    .catch(error => {
+                        Swal.fire(
+                            'Error!',
+                            'An error occurred while fetching the details. Please try again later.',
+                            'error'
+                        );
+                    });
+            });
+        });
+    });
 </script>

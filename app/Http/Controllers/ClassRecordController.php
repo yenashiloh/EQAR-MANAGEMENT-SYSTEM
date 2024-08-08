@@ -16,6 +16,11 @@ use App\Models\FacultyAccount;
 use App\Models\YearSemestralFolder;
 use App\Models\ProgramFolder;
 use App\Models\FolderName;
+use App\Models\ClassList;
+
+use App\Models\FacultyPersonalDetails;
+
+
 
 class ClassRecordController extends Controller
 {
@@ -169,7 +174,6 @@ class ClassRecordController extends Controller
         $folder = \App\Models\FolderName::find($id); 
         $folderName = $folder ? $folder->main_folder_name : 'Unknown Folder'; 
     
-        // Retrieve class lists
         $classLists = \App\Models\ClassList::where('program_folder_id', $id)->get();
     
         // Retrieve employee details
@@ -183,5 +187,11 @@ class ClassRecordController extends Controller
             'classLists' => $classLists,
             'employeeDetails' => $employeeDetails
         ]);
+    }
+
+    public function showClassList($id)
+    {
+        $classList = ClassList::findOrFail($id);
+        return response()->json($classList);
     }
 }

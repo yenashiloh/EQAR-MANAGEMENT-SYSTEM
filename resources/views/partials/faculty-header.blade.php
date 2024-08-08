@@ -10,6 +10,43 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 </head>
+<style>
+.custom-dropdown-button {
+    background-color: #171617;
+    color: #ffffff; 
+    border: 1px solid #171617; 
+}
+
+.custom-dropdown-button:focus, .custom-dropdown-button:hover {
+    background-color:  #171617; 
+    color: #ffffff; 
+    border: 1px solid #171617; 
+}
+
+.custom-dropdown-button:active {
+    background-color: #171617;
+}
+
+.custom-dropdown-button:focus {
+    background-color: #171617 !important;
+}
+
+.dropdown-item {
+    color: #ffffff; 
+}
+
+.dropdown-item:hover {
+    background-color: #333; 
+    color: #bebebe; 
+}
+
+.dropdown-menu .logout-link:hover, .dropdown-menu .logout-link:focus {
+    background-color:  #f0eded;
+    color: #131313; 
+}
+
+</style>
+
 <body style="background-color: #FEF9FF;">
     <nav class="navbar navbar-expand-lg navbar-custom">
         <a class="navbar-brand" href="#">
@@ -25,7 +62,7 @@
                     <a class="nav-link {{ Request::routeIs('home') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('accomplishments*') || Request::routeIs('faculty.faculty-accomplishment') ? 'active' : '' }}" href="{{ route('faculty.faculty-accomplishment') }}">Accomplishments</a>
+                    <a class="nav-link {{ Request::is('accomplishments*') || Request::is('faculty/accomplishments/folders*') || Request::routeIs('faculty.faculty-accomplishment') ? 'active' : '' }}" href="{{ route('faculty.faculty-accomplishment') }}">Accomplishments</a>
                 </li>
                 <li class="nav-item reports-item">
                     <a class="nav-link {{ Request::is('reports*') ? 'active' : '' }}" href="#" id="reportsLink">Reports</a>
@@ -38,8 +75,19 @@
                     </div>
                 </li>
             </ul>
-            <span class="navbar-text ml-auto" style="color: #FEF9FF"> <i class="fas fa-user"></i>
-                {{ $facultyDetails['first_name'] ?? '' }} {{ $facultyDetails['last_name'] ?? '' }}
-            </span>
+            <div class="ml-auto">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle custom-dropdown-button mr-4" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user"></i> {{ $facultyDetails['first_name'] ?? '' }} {{ $facultyDetails['last_name'] ?? '' }}
+                    </button>
+                    
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item logout-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>

@@ -26,7 +26,7 @@ class YearSemestralFolder extends Model
 
     public function folderName()
     {
-        return $this->belongsTo(FolderName::class, 'folder_name_id');
+        return $this->belongsTo(FolderName::class, 'folder_name_id', 'folder_name_id');
     }
 }
 

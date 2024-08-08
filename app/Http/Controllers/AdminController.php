@@ -143,6 +143,13 @@ class AdminController extends Controller
     
         return view('admin.reports.admin-hap', ['adminName' => $adminName]);
     }
-
     
+    public function adminLogout(Request $request)
+    {
+        Auth::guard('admin')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('admin-login');
+    }
+
 }

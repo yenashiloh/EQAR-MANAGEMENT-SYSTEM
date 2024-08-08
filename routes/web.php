@@ -52,10 +52,11 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::post('/maintenance/store-folder', [MaintenanceController::class, 'storeFolder'])->name('admin.maintenance.store-folder');
     Route::put('/maintenance/create-folder/update-folder/{folder_name_id}', [MaintenanceController::class, 'updateFolder'])->name('admin.maintenance.update-folder');
     Route::delete('/maintenance/create-folder/delete-folder/{folder_name_id}', [MaintenanceController::class, 'deleteFolder'])->name('admin.maintenance.delete-folder');
-
-
     Route::get('/accomplishment/class-records/year-semestral/{folder_name_id}', [AdminController::class, 'showYearSemestralFolder'])->name('admin.accomplishment.class-records.year-semestral');
+    Route::get('/class-records/{id}', [ClassRecordController::class, 'showClassList'])->name('class-records.show');
 
+    //Logout
+    Route::post('/admin-logout', [AdminController::class, 'adminLogout'])->name('admin-logout');
 });
 
 
@@ -94,7 +95,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/accomplishments/folders/add-accomplishment/{program_folder_id}', [FacultyController::class, 'storeAccomplishment'])->name('faculty.accomplishments.store-accomplishment');
 
-
     //Class List
     Route::get('/accomplishments/faculty-class-list', [FacultyController::class, 'classListPage'])->name('faculty.accomplishments.faculty-class-list');
     Route::get('/accomplishments/faculty-add-class-list', [FacultyController::class, 'addClassListFormPage'])->name('faculty.accomplishments.faculty-add-class-list');
@@ -108,11 +108,22 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/accomplishments/class-lists/{id}', [FacultyController::class, 'destroy'])->name('class-lists.destroy');
 
     //Show year semestral folder page 
-    Route::get('/accomplishments/folders/all-uploaded-file  /{folder_name_id}', [FacultyController::class, 'showYearSemestralFolder'])->name('faculty.accomplishments.folders.year-semestral');
+    Route::get('/accomplishments/folders/all-uploaded-file/{folder_name_id}', [FacultyController::class, 'showYearSemestralFolder'])->name('faculty.accomplishments.folders.year-semestral');
 
     // View Main Folder
     Route::get('/faculty/accomplishments/folders/view-folders/{id}', [FolderController::class, 'viewFolderFaculty'])->name('faculty.accomplishments.folders.view-folders');
 
     //Program Folder
     Route::get('/faculty/accomplishments/folders/all-uploaded-file/{id}', [FolderController::class, 'viewAllFiles'])->name('faculty.accomplishments.folders.all-uploaded-file');
+    Route::delete('/accomplishments/folders/delete-folder/{id}', [FolderController::class, 'destroy'])->name('class-lists.destroy');
+    Route::get('/accomplishments/folders/view-details/{id}', [FolderController::class, 'viewAllDetailsPage'])->name('faculty.accomplishments.folders.view-details');
+    
+    Route::get('/class-lists/{id}', [FolderController::class, 'show'])->name('class-lists.show');
+
+    //Logout
+    Route::post('/logout', [FacultyController::class, 'facultyLogout'])->name('logout');
+
+
+
+
 });

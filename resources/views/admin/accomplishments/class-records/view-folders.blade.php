@@ -11,8 +11,9 @@
                     {{ $folderName }} (an academic document that communicates information about a specific course and
                     explains the rules, responsibilities, and expectations associated with it.)
                 </h5>
-                <a href="{{ route('admin.accomplishments.class-records.admin-class-records') }}" class="btn btn-danger"><i
-                        class="fas fa-arrow-left"></i> Back to previous page</a>
+                <a href="javascript:history.back()" class="btn btn-danger">
+                    <i class="fas fa-arrow-left"></i> Back to previous page
+                </a>
             </div>
         </div>
     </div>
@@ -43,7 +44,9 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <form action="{{ route('admin.accomplishments.storeProgramFolder', ['id' => $id, 'folder_name_id' => $folder_name_id]) }}" method="POST">
+                                <form
+                                    action="{{ route('admin.accomplishments.storeProgramFolder', ['id' => $year_semestral_id]) }}"
+                                    method="POST">
                                     @csrf
                                     <div class="modal-body">
                                         <div class="form-group">
