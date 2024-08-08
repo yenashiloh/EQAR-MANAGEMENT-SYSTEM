@@ -32,7 +32,7 @@
                         </h6>
                     </div>
                     
-                    <form action="{{ route('faculty.accomplishments.class-record-store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('faculty.accomplishments.add-accomplishment') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="container">
                             <div class="row mb-3">

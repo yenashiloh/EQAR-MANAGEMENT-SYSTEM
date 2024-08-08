@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body style="background-color: #FEF9FF;">
     <nav class="navbar navbar-expand-lg navbar-custom">
@@ -38,6 +38,20 @@
                         </div>
                     </div>
                 </li>
+                <li class="nav-item maintenance-item">
+                    <a class="nav-link {{ Request::is('maintenance*') ? 'active' : '' }}" href="#" id="maintenanceLink">Maintenance</a>
+                    <div class="maintenance-submenu-custom" id="maintenanceSubmenu">
+                        <div class="submenu-content">
+                            <h5 class="submenu-item" style="color: #F7D328; margin-top: 15px; font-size: 18px;">MAINTENANCE</h5>
+                            <a class="submenu-item" href="{{route ('admin.maintenance.create-folder')}}">Create Folder</a>
+                            <a class="submenu-item" href="#">Accomplishment Form</a>
+
+                        </div>
+                    </div>
+                </li>
             </ul>
+            <span class="navbar-text ml-auto" style="color: #FEF9FF"> <i class="fas fa-user" style="margin-right: 5px;"></i>
+                {{ $adminName }}
+            </span>
         </div>
     </nav>

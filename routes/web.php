@@ -1,36 +1,118 @@
 <?php
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FacultyController;
+use App\Http\Controllers\ClassRecordController;
+use App\Http\Controllers\MaintenanceController;
+use App\Http\Controllers\FolderController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', [FacultyController::class, 'showRolePage'])->name('role');
+
 /*****************************************ADMIN****************************************/
-//Accomplishment
-Route::get('/admin-accomplishment', [AdminController::class, 'accomplishmentPage'])->name('admin.admin-accomplishment');
+    //Login
+    Route::get('/admin-login', [AdminController::class, 'showLoginPage'])
+        ->name('admin-login')
+        ->middleware(\App\Http\Middleware\PreventBackHistory::class);
 
-//Class Records
-Route::get('/accomplishments/admin-class-records', [AdminController::class, 'classRecordsPage'])->name('admin.accomplishments.admin-class-records');
-Route::get('/accomplishments/admin-add-accomplishment', [AdminController::class, 'addAccomplishmentPage'])->name('admin.accomplishments.admin-add-accomplishment');
+    Route::post('/admin-login', [AdminController::class, 'loginPost'])
+    ->name('admin-login.post')
+        ->middleware(\App\Http\Middleware\PreventBackHistory::class);
 
-//Records
-Route::get('/reports/admin-hap', [AdminController::class, 'hapPage'])->name('admin.reports.admin-hap');
+Route::middleware(['auth:admin'])->group(function () {
+    //Accomplishment
+    Route::get('/admin-accomplishment', [AdminController::class, 'accomplishmentPage'])->name('admin.admin-accomplishment');
+    Route::get('/accomplishments/class-records/admin-class-records', [AdminController::class, 'classRecordsPage'])->name('admin.accomplishments.class-records.admin-class-records');
+    Route::get('/accomplishments/admin-add-accomplishment', [AdminController::class, 'addAccomplishmentPage'])->name('admin.accomplishments.admin-add-accomplishment');
+
+    //Class Records
+    Route::post('/accomplishments/class-records/year-semestral/{folder_name_id}', [ClassRecordController::class, 'storeYearSemestralFolder'])
+    ->name('admin.accomplishment.class-records.year-semestral.store');
+
+    // View Main Folder
+    Route::get('/admin/accomplishments/class-records/view-folders/{id}', [ClassRecordController::class, 'viewFolder'])->name('admin.accomplishments.class-records.view-folders');
+    // Edit Main Folder
+    Route::post('/accomplishments/class-records/edit-folder/{id}', [ClassRecordController::class, 'editFolder'])->name('admin.accomplishments.editFolder');
+    // Delete Main Folder
+    Route::delete('/accomplishments/class-records/delete-folder/{id}', [ClassRecordController::class, 'deleteFolder'])->name('admin.accomplishments.deleteFolder');
+
+    //Program Folders
+    Route::post('admin/accomplishments/class-records/view-folders/{id}', [ClassRecordController::class, 'storeProgramFolder'])->name('admin.accomplishments.storeProgramFolder');
+    Route::get('/admin/accomplishments/class-records/all-uploaded-file/{id}', [ClassRecordController::class, 'viewAllFiles'])->name('admin.accomplishments.class-records.all-uploaded-file');
+   // Edit Program Folder
+    Route::post('/admin/accomplishments/class-records/edit-program-folder/{program_folder_id}', [ClassRecordController::class, 'editProgramFolder'])
+    ->name('admin.accomplishments.editProgramFolder');
+    // Delete Program Folder
+    Route::delete('/admin/accomplishments/view-folders/delete-program-folder/{id}', [ClassRecordController::class, 'deleteProgramFolder'])->name('admin.accomplishments.deleteProgramFolder');
+
+    //Records
+    Route::get('/reports/admin-hap', [AdminController::class, 'hapPage'])->name('admin.reports.admin-hap');
+    
+    //Maintenance
+    Route::get('/maintenance/create-folder', [MaintenanceController::class, 'folderMaintenancePage'])->name('admin.maintenance.create-folder');
+    Route::post('/maintenance/store-folder', [MaintenanceController::class, 'storeFolder'])->name('admin.maintenance.store-folder');
+    Route::put('/maintenance/create-folder/update-folder/{folder_name_id}', [MaintenanceController::class, 'updateFolder'])->name('admin.maintenance.update-folder');
+    Route::delete('/maintenance/create-folder/delete-folder/{folder_name_id}', [MaintenanceController::class, 'deleteFolder'])->name('admin.maintenance.delete-folder');
+
+
+    Route::get('/accomplishment/class-records/year-semestral/{folder_name_id}', [AdminController::class, 'showYearSemestralFolder'])->name('admin.accomplishment.class-records.year-semestral');
+
+});
+
 
 /****************************************FACULTY**************************************/
-//Accomplishment
-Route::get('/faculty-accomplishment', [FacultyController::class, 'accomplishmentPage'])->name('faculty.faculty-accomplishment');
+    //Sign Up
+    Route::get('/faculty-sign-up', [FacultyController::class, 'showSignUpPage'])
+        ->name('faculty-sign-up')
+        ->middleware(\App\Http\Middleware\PreventBackHistory::class);
+    Route::post('/faculty-sign-up', [FacultyController::class, 'signUpPost'])->name('faculty-sign-up.post');
 
-//Class Records
-Route::get('/accomplishments/faculty-class-records', [FacultyController::class, 'classRecordsPage'])->name('faculty.accomplishments.faculty-class-records');
-Route::get('/accomplishments/faculty-add-accomplishment', [FacultyController::class, 'addAccomplishmentPage'])->name('faculty.accomplishments.faculty-add-accomplishment');
-Route::post('/faculty-class-record', [FacultyController::class, 'storeClassRecord'])->name('faculty.accomplishments.class-record-store');
+    //Login
+    Route::get('/faculty-login', [FacultyController::class, 'showLoginPage'])
+        ->name('faculty-login')
+        ->middleware(\App\Http\Middleware\PreventBackHistory::class);
+        
+    Route::post('/faculty-login', [FacultyController::class, 'loginPost'])->name('login.post');
 
-//Class List
-Route::get('/accomplishments/faculty-class-list', [FacultyController::class, 'classListPage'])->name('faculty.accomplishments.faculty-class-list');
-Route::get('/accomplishments/faculty-add-class-list', [FacultyController::class, 'addClassListFormPage'])->name('faculty.accomplishments.faculty-add-class-list');
-Route::post('/faculty-accomplishment', [FacultyController::class, 'storeClassList'])->name('faculty.accomplishments.class-list-store');
+    //Verification OTP
+    Route::get('/otp-verification', [FacultyController::class, 'showOtpVerificationForm'])
+        ->name('otp-verification')
+        ->middleware(\App\Http\Middleware\PreventBackHistory::class);
+    Route::post('/verify-otp', [FacultyController::class, 'verifyOtp'])->name('verify-otp');
+    Route::get('/verified', [FacultyController::class, 'showVerifiedCheck'])->name('verified');
 
-Route::get('/accomplishments/class-lists/{id}/edit', [FacultyController::class, 'edit'])->name('class-lists.edit');
+Route::middleware(['auth'])->group(function () {
+    //Verification Email
+    Route::post('/resend-otp', [FacultyController::class, 'resendOtp'])->name('resend-otp');
+    
+    //Accomplishment
+    Route::get('/faculty-accomplishment', [FacultyController::class, 'accomplishmentPage'])->name('faculty.faculty-accomplishment');
 
-// Route to handle the deletion of a class list item
-Route::delete('/accomplishments/class-lists/{id}', [FacultyController::class, 'destroy'])->name('class-lists.destroy');
+    //Class Records
+    Route::get('/accomplishments/faculty-class-records', [FacultyController::class, 'classRecordsPage'])->name('faculty.accomplishments.faculty-class-records');
+
+    Route::get('/accomplishments/folders/add-accomplishment/{program_folder_id}', [FacultyController::class, 'addAccomplishmentPage'])->name('faculty.accomplishments.add-accomplishment');
+
+    Route::post('/accomplishments/folders/add-accomplishment/{program_folder_id}', [FacultyController::class, 'storeAccomplishment'])->name('faculty.accomplishments.store-accomplishment');
 
 
+    //Class List
+    Route::get('/accomplishments/faculty-class-list', [FacultyController::class, 'classListPage'])->name('faculty.accomplishments.faculty-class-list');
+    Route::get('/accomplishments/faculty-add-class-list', [FacultyController::class, 'addClassListFormPage'])->name('faculty.accomplishments.faculty-add-class-list');
+
+    Route::post('/accomplishments/folders/store-class-list/{program_folder_id}', [FacultyController::class, 'storeClassList'])->name('faculty.accomplishments.folders.store-class-list');
+
+
+    Route::get('/accomplishments/class-lists/{id}/edit', [FacultyController::class, 'edit'])->name('class-lists.edit');
+
+    // Delete
+    Route::delete('/accomplishments/class-lists/{id}', [FacultyController::class, 'destroy'])->name('class-lists.destroy');
+
+    //Show year semestral folder page 
+    Route::get('/accomplishments/folders/all-uploaded-file  /{folder_name_id}', [FacultyController::class, 'showYearSemestralFolder'])->name('faculty.accomplishments.folders.year-semestral');
+
+    // View Main Folder
+    Route::get('/faculty/accomplishments/folders/view-folders/{id}', [FolderController::class, 'viewFolderFaculty'])->name('faculty.accomplishments.folders.view-folders');
+
+    //Program Folder
+    Route::get('/faculty/accomplishments/folders/all-uploaded-file/{id}', [FolderController::class, 'viewAllFiles'])->name('faculty.accomplishments.folders.all-uploaded-file');
+});

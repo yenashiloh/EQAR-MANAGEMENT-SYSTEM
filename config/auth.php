@@ -38,7 +38,22 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'faculty_account',
+        ],
+
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admin_account',
+        ],
+
+        'faculty_personal_details' => [
+            'driver' => 'session',
+            'provider' => 'faculty_personal_details',
+        ],
+
+        'faculty_account' => [
+            'driver' => 'session',
+            'provider' => 'faculty_account',
         ],
     ],
 
@@ -59,10 +74,21 @@ return [
     |
     */
 
+        
     'providers' => [
-        'users' => [
+        'faculty_account' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => App\Models\FacultyAccount::class,
+        ],
+
+        'admin_account' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\AdminAccount::class,
+        ],
+
+        'faculty_personal_details' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\FacultyPersonalDetails::class,
         ],
 
         // 'users' => [

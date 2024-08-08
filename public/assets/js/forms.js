@@ -59,18 +59,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-
         saveButton.disabled = true;
         saveButton.classList.add('submitting');
         buttonText.textContent = 'Submitting...';
 
         const formData = new FormData(form);
-
         const xhr = new XMLHttpRequest();
         xhr.open('POST', form.action, true);
-
         xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
         xhr.setRequestHeader('Accept', 'application/json');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); 
 
         xhr.upload.onprogress = function(e) {
             if (e.lengthComputable) {
@@ -87,24 +85,26 @@ document.addEventListener('DOMContentLoaded', function() {
                         window.location.href = response.redirect;
                     } else {
                         console.error('Error:', response.message);
+                        showMessage(response.message, 'danger');
                         resetButton();
                     }
                 } catch (e) {
                     console.error('Error parsing JSON response:', e);
-                    if (xhr.responseURL !== form.action) {
-                        window.location.href = xhr.responseURL;
-                    } else {
-                        resetButton();
-                    }
+                    console.error('Raw response:', xhr.responseText);
+                    showMessage('An unexpected error occurred. Please try again.', 'danger');
+                    resetButton();
                 }
             } else {
-                console.error('Error:', xhr.statusText);
+                console.error('HTTP Error:', xhr.status, xhr.statusText);
+                console.error('Response:', xhr.responseText);
+                showMessage('An error occurred while submitting the form. Please try again.', 'danger');
                 resetButton();
             }
         };
 
         xhr.onerror = function() {
-            console.error('Error:', xhr.statusText);
+            console.error('Network Error:', xhr.status, xhr.statusText);
+            showMessage('A network error occurred. Please check your connection and try again.', 'danger');
             resetButton();
         };
 
@@ -118,13 +118,19 @@ document.addEventListener('DOMContentLoaded', function() {
         progressBar.style.width = '0';
     }
 
-    setTimeout(function() {
-        const successMessage = document.getElementById('successMessage');
-        if (successMessage) {
-            successMessage.style.opacity = 0;
-            setTimeout(function() {
-                successMessage.remove();
-            }, 500); 
-        }
-    }, 5000);
+    function showMessage(message, type) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+        alertDiv.role = 'alert';
+        alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        form.parentNode.insertBefore(alertDiv, form);
+
+        setTimeout(() => {
+            alertDiv.style.opacity = '0';
+            setTimeout(() => alertDiv.remove(), 500);
+        }, 5000);
+    }
 });

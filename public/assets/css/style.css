@@ -42,14 +42,10 @@ body {
     margin-right: 30px; 
 }
 
-.reports-item {
-    position: static; 
-}
-
-.reports-submenu-custom {
+.reports-submenu-custom, .maintenance-submenu-custom {
     display: none;
     position: absolute;
-    margin-top: 2px;
+    margin-top: 1px;
     top: 100%;
     left: 0;
     width: 100%;
@@ -58,8 +54,25 @@ body {
     padding: 10px 0;
 }
 
-.reports-submenu-custom.show-submenu {
+.reports-submenu-custom.show-submenu, .maintenance-submenu-custom.show-submenu {
     display: block;
+}
+
+.submenu-item {
+    display: block;
+    color: #ffffff;
+    padding: 8px 0;
+    text-decoration: none;
+    cursor: pointer; 
+}
+
+.submenu-item:hover {
+    text-decoration: none;
+    color: #F7D328;
+}
+
+.reports-item, .maintenance-item {
+    position: static; 
 }
 
 .submenu-content {
@@ -68,29 +81,6 @@ body {
     padding: 0 20px;
 }
 
-.submenu-item {
-    display: block;
-    color: #ffffff;
-    padding: 8px 0;
-    text-decoration: none;
-}
-
-.submenu-item:hover {
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.reports-item:hover .reports-submenu-custom {
-    display: none;
-}
-
-.show-submenu {
-    display: block;
-}
-
-.reports-submenu-custom.show-submenu {
-    display: block;
-}
 
 /*Accomplishment*/
 .academic {

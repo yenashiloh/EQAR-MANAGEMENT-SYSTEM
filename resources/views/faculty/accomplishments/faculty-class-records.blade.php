@@ -12,6 +12,9 @@
                     Class Records (an academic document that communicates information about a specific course and
                     explains the rules, responsibilities and expectations associated with it.)
                 </h5>
+                <a href="{{ route('faculty.faculty-accomplishment') }}" class="btn btn-danger">
+                    <i class="fas fa-arrow-left"></i> Back to previous page
+                </a>
             </div>
         </div>
     </div>
