@@ -103,7 +103,7 @@
                                     <input type="text" id="supportingDocuments" name="supportingDocuments" class="form-control mb-2">
                                 </div>
                                 <div class="col-md-12">
-                                    <label for="fileUpload" class="form-label">Upload Supporting Document</label>
+                                    <label for="fileUpload" class="form-label">Upload Supporting Document (max: 50MB)</label>
                                     <div class="dropzone" id="fileUploadDropzone">
                                         <input type="file" id="fileUpload" class="file-input" name="fileUpload" hidden>
                                         <div id="dropzoneContent">

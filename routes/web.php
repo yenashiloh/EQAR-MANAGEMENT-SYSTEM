@@ -18,7 +18,7 @@ Route::get('/', [FacultyController::class, 'showRolePage'])->name('role');
     ->name('admin-login.post')
         ->middleware(\App\Http\Middleware\PreventBackHistory::class);
 
-Route::middleware(['auth:admin'])->group(function () {
+Route::middleware(['auth:admin', 'prevent-back-history'])->group(function () {
     //Accomplishment
     Route::get('/admin-accomplishment', [AdminController::class, 'accomplishmentPage'])->name('admin.admin-accomplishment');
     Route::get('/accomplishments/class-records/admin-class-records', [AdminController::class, 'classRecordsPage'])->name('admin.accomplishments.class-records.admin-class-records');
@@ -27,7 +27,6 @@ Route::middleware(['auth:admin'])->group(function () {
     //Class Records
     Route::post('/accomplishments/class-records/year-semestral/{folder_name_id}', [ClassRecordController::class, 'storeYearSemestralFolder'])
     ->name('admin.accomplishment.class-records.year-semestral.store');
-
     // View Main Folder
     Route::get('/admin/accomplishments/class-records/view-folders/{id}', [ClassRecordController::class, 'viewFolder'])->name('admin.accomplishments.class-records.view-folders');
     // Edit Main Folder
@@ -37,10 +36,10 @@ Route::middleware(['auth:admin'])->group(function () {
 
     //Program Folders
     Route::post('admin/accomplishments/class-records/view-folders/{id}', [ClassRecordController::class, 'storeProgramFolder'])->name('admin.accomplishments.storeProgramFolder');
+    //View All Files
     Route::get('/admin/accomplishments/class-records/all-uploaded-file/{id}', [ClassRecordController::class, 'viewAllFiles'])->name('admin.accomplishments.class-records.all-uploaded-file');
    // Edit Program Folder
-    Route::post('/admin/accomplishments/class-records/edit-program-folder/{program_folder_id}', [ClassRecordController::class, 'editProgramFolder'])
-    ->name('admin.accomplishments.editProgramFolder');
+    Route::post('/admin/accomplishments/class-records/edit-program-folder/{program_folder_id}', [ClassRecordController::class, 'editProgramFolder'])->name('admin.accomplishments.editProgramFolder');
     // Delete Program Folder
     Route::delete('/admin/accomplishments/view-folders/delete-program-folder/{id}', [ClassRecordController::class, 'deleteProgramFolder'])->name('admin.accomplishments.deleteProgramFolder');
 
@@ -90,9 +89,9 @@ Route::middleware(['auth'])->group(function () {
 
     //Class Records
     Route::get('/accomplishments/faculty-class-records', [FacultyController::class, 'classRecordsPage'])->name('faculty.accomplishments.faculty-class-records');
-
+    //View the accomplishment Page
     Route::get('/accomplishments/folders/add-accomplishment/{program_folder_id}', [FacultyController::class, 'addAccomplishmentPage'])->name('faculty.accomplishments.add-accomplishment');
-
+    //Store accomplishment
     Route::post('/accomplishments/folders/add-accomplishment/{program_folder_id}', [FacultyController::class, 'storeAccomplishment'])->name('faculty.accomplishments.store-accomplishment');
 
     //Class List
@@ -100,7 +99,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/accomplishments/faculty-add-class-list', [FacultyController::class, 'addClassListFormPage'])->name('faculty.accomplishments.faculty-add-class-list');
 
     Route::post('/accomplishments/folders/store-class-list/{program_folder_id}', [FacultyController::class, 'storeClassList'])->name('faculty.accomplishments.folders.store-class-list');
-
 
     Route::get('/accomplishments/class-lists/{id}/edit', [FacultyController::class, 'edit'])->name('class-lists.edit');
 
@@ -123,7 +121,11 @@ Route::middleware(['auth'])->group(function () {
     //Logout
     Route::post('/logout', [FacultyController::class, 'facultyLogout'])->name('logout');
 
+    // Show the edit form
+    Route::get('/faculty/accomplishments/folders/edit-file/{id}', [FolderController::class, 'edit'])->name('faculty.accomplishments.folders.edit-file');
 
+    // Update the record
+    Route::post('/faculty/accomplishments/folders/update/{id}', [FolderController::class, 'update'])->name('faculty.accomplishments.folders.update-file');
 
 
 });

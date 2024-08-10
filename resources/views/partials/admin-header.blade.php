@@ -10,44 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        .custom-dropdown-button {
-            background-color: #171617;
-            color: #ffffff; 
-            border: 1px solid #171617; 
-        }
-        
-        .custom-dropdown-button:focus, .custom-dropdown-button:hover {
-            background-color:  #171617; 
-            color: #ffffff; 
-            border: 1px solid #171617; 
-        }
-        
-        .custom-dropdown-button:active {
-            background-color: #171617;
-        }
-        
-        .custom-dropdown-button:focus {
-            background-color: #171617 !important;
-        }
-        
-        .dropdown-item {
-            color: #ffffff; 
-        }
-        
-        .dropdown-item:hover {
-            background-color: #333; 
-            color: #bebebe; 
-        }
-        
-        .dropdown-menu .logout-link:hover, .dropdown-menu .logout-link:focus {
-            background-color:  #f0eded;
-            color: #131313; 
-        }
-        
-        </style>
 </head>
-
 <body style="background-color: #FEF9FF;">
     <nav class="navbar navbar-expand-lg navbar-custom">
         <a class="navbar-brand" href="#">
@@ -63,7 +26,7 @@
                     <a class="nav-link {{ Request::routeIs('home') ? 'active' : '' }}" href="{{ url('/') }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('accomplishment*') || Request::is('admin/accomplishments/*') || Request::routeIs('admin.admin-accomplishment') ? 'active' : '' }}" href="{{ route('admin.admin-accomplishment') }}">Accomplishments</a>
+                    <a class="nav-link {{ Request::is('accomplishment*') || Request::is('admin/accomplishments/*') ||  Request::is('admin/accomplishments/class-records*') || Request::routeIs('admin.admin-accomplishment') ? 'active' : '' }}" href="{{ route('admin.admin-accomplishment') }}">Accomplishments</a>
                 </li>
                 <li class="nav-item reports-item">
                     <a class="nav-link {{ Request::is('reports*') ? 'active' : '' }}" href="#" id="reportsLink">Reports</a>
@@ -80,26 +43,62 @@
                     <div class="maintenance-submenu-custom" id="maintenanceSubmenu">
                         <div class="submenu-content">
                             <h5 class="submenu-item" style="color: #F7D328; margin-top: 15px; font-size: 18px;">MAINTENANCE</h5>
-                            <a class="submenu-item" href="{{route ('admin.maintenance.create-folder')}}">Create Folder</a>
-                            <a class="submenu-item" href="#">Accomplishment Form</a>
+                            <a class="submenu-item" href="{{route ('admin.maintenance.create-folder')}}">Manage Main Folder</a>
+                            <a class="submenu-item" href="#">Manage Accomplishment Form</a>
+
                         </div>
                     </div>
                 </li>
-
             </ul>
-            <div class="ml-auto">
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle custom-dropdown-button mr-4" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-user"></i>   {{ $adminName }}
-                    </button>
-                    
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item logout-link" href="{{ route('admin-logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
-                        <form id="logout-form" action="{{ route('admin-logout') }}" method="POST" style="display: none;">
-                            @csrf
-                        </form>
-                    </div>
+            <span class="navbar-text ml-auto">
+                <i class="fas fa-user"></i>
+                <span id="dropdown-trigger">
+                    {{ $adminName }}
+                    <i class="dropdown-toggle mr-2"></i>
+                </span>
+                <div class="dropdown-content" id="dropdown-content">
+                    <a href="#" id="logout-link">Logout</a>
                 </div>
-            </div>
+            </span>
         </div>
     </nav>
+
+    <script>
+          document.getElementById('logout-link').addEventListener('click', function(e) {
+            e.preventDefault();
+
+            fetch('{{ route('logout') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    credentials: 'same-origin'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '{{ route('admin-login') }}';
+                    } else {
+                        console.error('Logout failed');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+           //Dropdown logout
+           document.addEventListener('DOMContentLoaded', function() {
+            const dropdownTrigger = document.getElementById('dropdown-trigger');
+            const dropdownContent = document.getElementById('dropdown-content');
+
+            dropdownTrigger.addEventListener('click', function() {
+                dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' :
+                'block';
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!dropdownContent.contains(event.target) && !dropdownTrigger.contains(event.target)) {
+                    dropdownContent.style.display = 'none';
+                }
+            });
+        });
+    </script>

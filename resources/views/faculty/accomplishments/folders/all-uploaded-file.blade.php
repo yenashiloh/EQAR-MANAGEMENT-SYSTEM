@@ -12,7 +12,7 @@
         <div class="col-md-8 col-lg-10 mx-auto">
             <div class="header-container">
                 <h5 class="academic">
-                    {{ $folderName }} (an academic document that communicates information about a specific course and
+                    All Uploaded Files (an academic document that communicates information about a specific course and
                     explains the rules, responsibilities, and expectations associated with it.)
                 </h5>
                 <a href="javascript:history.back()" class="btn btn-danger">
@@ -38,16 +38,7 @@
                         </div>
                     @endif
 
-                    {{-- <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        setTimeout(function() {
-                            var successAlert = document.getElementById('success-alert');
-                            if (successAlert) {
-                                successAlert.classList.remove('show');
-                            }
-                        }, 3000); // 3000 milliseconds = 3 seconds
-                    });
-                </script> --}}
+               
                     <!-- View All Details Modal -->
                     <div class="modal fade" id="viewDetailsModal" tabindex="-1" role="dialog"
                         aria-labelledby="viewDetailsModalLabel" aria-hidden="true">
@@ -121,9 +112,10 @@
                                     <td>{{ $classList->assignedTask }}</td>
                                     <td>
                                         @if ($classList->fileUpload)
-                                        <a href="#" onclick="window.open('{{ Storage::url($classList->fileUpload) }}', '_blank')">
-                                            {{ $classList->original_file_name ?? 'View File' }}
-                                        </a>
+                                            <a href="#"
+                                                onclick="window.open('{{ Storage::url($classList->fileUpload) }}', '_blank')">
+                                                {{ $classList->original_file_name ?? 'View File' }}
+                                            </a>
                                         @else
                                             No file uploaded
                                         @endif
@@ -132,8 +124,7 @@
                                         <div class="d-flex">
                                             <a href="#" class="btn btn-info btn-sm"
                                                 data-id="{{ $classList->id }}">View</a>
-                                            <a href="{{ route('class-lists.edit', $classList->id) }}"
-                                                class="btn btn-warning btn-sm">Edit</a>
+                                                <a href="{{ route('faculty.accomplishments.folders.edit-file', $classList->id) }}" class="btn btn-warning btn-sm">Edit</a>
                                             <button class="btn btn-danger btn-sm delete-folder-btn"
                                                 data-url="{{ route('class-lists.destroy', $classList->id) }}">
                                                 Delete
@@ -208,6 +199,20 @@
             });
         });
     });
+
+    //success message
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            var successAlert = document.getElementById('success-alert');
+            if (successAlert) {
+                successAlert.classList.remove('show');
+                successAlert.addEventListener('transitionend', function() {
+                    successAlert.remove();
+                });
+            }
+        }, 3000);
+    });
+
 
     //view details
     document.addEventListener('DOMContentLoaded', function() {

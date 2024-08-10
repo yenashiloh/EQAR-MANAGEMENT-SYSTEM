@@ -283,3 +283,67 @@ select.form-select {
     width: 230px;
     max-width: 230px;
 }
+
+#saveButton.updating {
+    width: 230px;
+    max-width: 230px;
+}
+
+#updateButton {
+    position: relative;
+    overflow: hidden;
+    transition: width 0.3s ease;
+}
+
+#updateButton.updating {
+    width: 230px;
+    max-width: 230px;
+}
+
+#updateButton .progress-bar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.7);
+    width: 0;
+    transition: width 0.3s ease;
+}
+
+
+.navbar-text {
+    position: relative;
+    display: inline-block;
+    color: #FEF9FF;
+    cursor: pointer;
+}
+
+.navbar-text .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #343a40;
+    min-width: 130px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.navbar-text .dropdown-content a {
+    color: #FEF9FF;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.navbar-text .dropdown-content a:hover {
+    background-color: #495057;
+}
+
+.navbar-text .dropdown-content a:last-child {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.navbar-text i {
+    margin-right: 8px;
+}

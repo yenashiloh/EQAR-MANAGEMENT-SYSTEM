@@ -121,15 +121,73 @@ class FolderController extends Controller
         $classList = ClassList::findOrFail($id);
         return response()->json($classList);
     }
+
+    public function edit($id)
+    {
+        if (!auth()->check()) {
+            return redirect()->route('faculty-login');
+        }
     
+        $facultyDetails = $this->getFacultyDetails();
+        $accomplishment = \App\Models\ClassList::find($id);
+        
+        if (!$accomplishment) {
+            return redirect()->route('folder-not-found');
+        }
+    
+        return view('faculty.accomplishments.folders.edit-file', [
+            'accomplishment' => $accomplishment,
+            'facultyDetails' =>  $facultyDetails,
+        ]);
+    }
+    
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'reporting_to' => 'required|string',
+            'department' => 'required|string',
+            'collegeCampus' => 'nullable|string',
+            'courseTitle' => 'required|string',
+            'courseCode' => 'required|string',
+            'assignedTask' => 'required|string',
+            'dateFinished' => 'required|date',
+            'supportingDocuments' => 'nullable|string',
+            'fileUpload' => 'nullable|file|max:51200',
+            'notes' => 'nullable|string',
+        ]);
 
-    // public function deleteFolder($year_semestral_id)
-    // {
-    //     $folder = YearSemestralFolder::find($year_semestral_id);
-    //     $folder->delete();
+        $accomplishment = ClassList::findOrFail($id);
+        $filePath = $accomplishment->fileUpload;
 
-    //     return redirect()->route('admin.accomplishment.class-records.year-semestral', ['folder_name_id' => $folder->folder_name_id])
-    //         ->with('success', 'Folder deleted successfully!');
-    // }
+        if ($request->hasFile('fileUpload')) {
+            $file = $request->file('fileUpload');
+            $filePath = $file->store('uploads', 'public');
+        }
+
+        $accomplishment->update([
+            'reporting_to' => $request->input('reporting_to'),
+            'department' => $request->input('department'),
+            'collegeCampus' => $request->input('collegeCampus'),
+            'courseTitle' => $request->input('courseTitle'),
+            'courseCode' => $request->input('courseCode'),
+            'assignedTask' => $request->input('assignedTask'),
+            'dateFinished' => $request->input('dateFinished'),
+            'supportingDocuments' => $request->input('supportingDocuments'),
+            'fileUpload' => $filePath,
+            'notes' => $request->input('notes'),
+        ]);
+        session()->flash('success', 'Updated successfully!');
+        
+        return response()->json([
+            'success' => true,
+            'redirect' => route('faculty.accomplishments.folders.all-uploaded-file', [$accomplishment->program_folder_id]),
+            'message' => 'Updated successfully!',
+        ]);
+        
+        
+    }
+
+
+    
 
 }
